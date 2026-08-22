@@ -1,9 +1,11 @@
 import pygame
 import random
+import asyncio
 
-def main():
-    screen = setup()
-    loop(screen)
+async def main():
+    while True:
+        screen = setup()
+        await loop(screen)
 
 def setup():
     # basic game setup, runs once
@@ -11,7 +13,7 @@ def setup():
     screen = pygame.display.set_mode((640, 740))
     return screen
 
-def loop(screen):
+async def loop(screen):
     clock = pygame.time.Clock()
     fontT = pygame.font.SysFont("consolas", 35)
     font = pygame.font.SysFont("consolas", 20)
@@ -29,9 +31,9 @@ def loop(screen):
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if play_button.collidepoint(event.pos):
                     print("Left mouse button clicked on Play Button.")
-                    result = game(screen)
+                    result = await game(screen)
                     while result == "replay":
-                        result = game(screen)
+                        result = await game(screen)
                     if result == "quit":
                         running = False
                     if result == "menu":
@@ -97,6 +99,7 @@ def loop(screen):
             
 
         clock.tick(60)
+        await asyncio.sleep(0)
 
     # ---Quit-----------------------------------------------------------------------------------------------
     pygame.quit()
@@ -104,7 +107,7 @@ def loop(screen):
 
 
 # ~~~Starting Game~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def game(screen):
+async def game(screen):
     clock = pygame.time.Clock()
     font = pygame.font.SysFont("consolas", 40)
     
@@ -167,6 +170,7 @@ def game(screen):
                 else:
                     game_over = True
                 pass
+        
             
         elapsed = pygame.time.get_ticks() - shown_at
         
@@ -215,11 +219,13 @@ def game(screen):
         
         pygame.display.update()    
         clock.tick(60)
+        await asyncio.sleep(0)
+        
             
-    result = game_over_screen(screen, score)
+    result = await game_over_screen(screen, score)
     return result
         
-def game_over_screen(screen, score):
+async def game_over_screen(screen, score):
     
     clock = pygame.time.Clock()
     font = pygame.font.SysFont("consolas", 20)
@@ -282,6 +288,7 @@ def game_over_screen(screen, score):
         
         pygame.display.update()
         clock.tick(60)
+        await asyncio.sleep(0)
         
 def get_correct_answer(current_direction, direction_color, opposites):
     if direction_color == "yellow":
@@ -298,4 +305,4 @@ def get_pressed_direction(key, key_to_direction):
     return key_to_direction.get(key)
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
