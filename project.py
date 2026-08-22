@@ -3,10 +3,17 @@ import random
 import asyncio
 
 async def main():
-    while True:
-        screen = setup()
-        await loop(screen)
-
+    screen = setup()
+    result = await loop(screen)
+    if result == "quit":
+        screen.fill("black")
+        font = pygame.font.SysFont("consolas", 24)
+        msg = font.render("Thanks for playing! Tou can n=close this tab.", antialias=True, color="white")
+        screen.blit(msg, msg.get_rect(center=(320, 370)))
+        pygame.display.update()
+        while True:
+            await asyncio.sleep(0)
+        
 def setup():
     # basic game setup, runs once
     pygame.init()
@@ -42,7 +49,7 @@ async def loop(screen):
                         
                 if quit_button.collidepoint(event.pos):
                     print("Left mouse button clicked on Quit button.")
-                    return pygame.quit()
+                    running = False
                 
                 
         screen.fill("black")    
