@@ -1,6 +1,6 @@
 # Echo — CS50P Final Project
 
-#### Video Demo: <URL HERE>
+#### Video Demo: <https://youtu.be/UVcrdyXeD3A>
 
 ## Description
 
